@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PubList from '../components/PubList.astro';
+import { THEMES } from '../data/site';
+import { url } from '../lib/url';
+
+const pubs = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year);
+---
+
+<Base title="Research" description="Our three research areas: guardrails for conversational agents, cognitively grounded agents, and conversational AI for simulation, assessment, and training.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Research</p>
+      <h1>What we work on</h1>
+      <p class="lede">
+        We bring together computer science and cognitive psychology to study conversational agents as conversation partners, not just question-answering tools.
+        Our work falls into three connected areas.
+      </p>
+    </header>
+
+    {THEMES.map((t) => {
+      const related = pubs.filter((p) => p.data.theme === t.id);
+      return (
+        <section id={t.id} class="theme">
+          <div class="side">
+            <span class="num">{t.number}</span>
+          </div>
+          <div class="body">
+            <h2>{t.title}</h2>
+            <p class="lede">{t.lede}</p>
+            <h3 class="q">Questions we’re asking</h3>
+            <ul class="questions">
+              {t.questions.map((q) => <li>{q}</li>)}
+            </ul>
+            {related.length > 0 && (
+              <details>
+                <summary>Related publications ({related.length})</summary>
+                <PubList pubs={related} />
+              </details>
+            )}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="cta">
+      <h2>Interested in working with us?</h2>
+      <p>We welcome students and collaborators from computer science, psychology, education, and beyond.</p>
+      <a class="button" href={url('contact')}>Get in touch</a>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .theme { display: grid; grid-template-columns: 6rem 1fr; gap: 2rem; padding-bottom: 3.5rem; border-bottom: 1px solid var(--rule); scroll-margin-top: 6rem; }
+  .theme + .theme { margin-top: 3.5rem; }
+  .num { font-family: var(--font-display); font-size: 3.5rem; line-height: 1; color: var(--teal); position: sticky; top: 6rem; font-weight: 700; }
+  .q { font-family: var(--font-sans); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-faint); margin-top: 2rem; }
+  .questions { padding-left: 1.2rem; max-width: 44rem; }
+  .questions li { margin-bottom: 0.5rem; }
+  .questions li::marker { color: var(--accent); }
+  details { margin-top: 1.75rem; }
+  summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  .cta { text-align: center; padding: 3rem 1.5rem; border-radius: var(--radius); background: var(--accent-soft); }
+  .cta p { color: var(--ink-soft); }
+  @media (max-width: 640px) {
+    .theme { grid-template-columns: 1fr; gap: 0.5rem; }
+    .num { position: static; font-size: 2.5rem; }
+  }
+</style>

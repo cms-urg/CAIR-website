@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+import { url } from '../lib/url';
+---
+
+<Base title="Contact" description="Get in touch with the Conversational AI Research Lab.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Contact</p>
+      <h1>Get in touch</h1>
+      <p class="lede">We’re always glad to hear from prospective students, collaborators, and partners interested in conversational AI.</p>
+    </header>
+
+    <div class="cards">
+      <div class="card">
+        <h2>Email</h2>
+        <p>For research enquiries, collaborations, and student opportunities.</p>
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </div>
+      <div class="card">
+        <h2>LinkedIn</h2>
+        <p>Follow the lab for updates on new papers, talks, and projects.</p>
+        <a href={SITE.linkedin} rel="noopener">Conversational AI Research Group</a>
+      </div>
+      <div class="card">
+        <h2>Location</h2>
+        <p>{SITE.institution}<br />1265 Military Trail<br />Toronto, ON M1C 1A4, Canada</p>
+      </div>
+    </div>
+
+    <section class="join">
+      <h2>Joining the lab</h2>
+      <p>
+        We work with undergraduate and graduate students from computer science, psychology, and related fields.
+        If you’re a UTSC student interested in research, send a short note about your interests and background,
+        and mention which of our <a href={url("research")}>research areas</a> excites you most.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.25rem; }
+  .card { padding: 1.75rem; border-radius: var(--radius); background: var(--bg-raised); border: 1px solid var(--rule); }
+  .card h2 { font-size: 1.3rem; }
+  .card p { color: var(--ink-soft); margin-top: 0; }
+  .card a { font-weight: 600; word-break: break-word; }
+  .join { max-width: 44rem; }
+</style>

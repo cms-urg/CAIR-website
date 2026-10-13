@@ -1,0 +1,62 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Avatar from '../../components/Avatar.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getArticles } from '../../lib/content';
+import { url } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const people = await getCollection('people');
+  return people.map((person) => ({ params: { id: person.id }, props: { person } }));
+}
+
+const { person } = Astro.props;
+const { Content } = await render(person);
+const d = person.data;
+const articles = (await getArticles()).filter((a) => a.data.authors.some((r) => r.id === person.id));
+
+const LABELS = { website: 'Website', scholar: 'Google Scholar', orcid: 'ORCID', github: 'GitHub', linkedin: 'LinkedIn' } as const;
+const links = Object.entries(d.links ?? {}).filter(([, v]) => v) as [keyof typeof LABELS, string][];
+---
+
+<Base title={d.name} description={`${d.name} — ${d.status}`}>
+  <div class="wrap">
+    <a class="back" href={url('people')}>← All people</a>
+    <header class="profile">
+      <Avatar name={d.name} photo={d.photo} size={200} />
+      <div>
+        <h1>{d.name}</h1>
+        <p class="status">{d.status}</p>
+        {d.affiliation && <p class="aff">{d.affiliation}</p>}
+        <ul class="links">
+          {d.email && <li><a href={`mailto:${d.email}`}>Email</a></li>}
+          {d.link && <li><a href={d.link} rel="noopener">Profile</a></li>}
+          {links.map(([k, v]) => <li><a href={v} rel="noopener">{LABELS[k]}</a></li>)}
+        </ul>
+      </div>
+    </header>
+
+    <div class="prose bio"><Content /></div>
+
+    {articles.length > 0 && (
+      <section>
+        <div class="section-title"><h2>Articles</h2><span class="count">{articles.length}</span></div>
+        <div class="grid">{articles.map((a) => <ArticleCard article={a} />)}</div>
+      </section>
+    )}
+  </div>
+</Base>
+
+<style>
+  .back { display: inline-block; margin: 2rem 0 1.5rem; font-size: 0.92rem; text-decoration: none; }
+  .profile { display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; padding-bottom: 2.5rem; border-bottom: 1px solid var(--rule); margin-bottom: 2.5rem; }
+  h1 { margin-bottom: 0.25rem; }
+  .status { font-size: 1.15rem; color: var(--ink-soft); margin: 0; }
+  .aff { color: var(--ink-faint); margin: 0.25rem 0 0; }
+  .links { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .links a { display: block; padding: 0.3rem 0.85rem; border-radius: 999px; border: 1px solid var(--rule); font-size: 0.88rem; text-decoration: none; }
+  .links a:hover { border-color: var(--accent); }
+  .bio { margin-bottom: 4rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 1.25rem; }
+</style>

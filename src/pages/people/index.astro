@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import PersonCard from '../../components/PersonCard.astro';
+import { getPeopleByGroup } from '../../lib/content';
+import { url } from '../../lib/url';
+
+const { director, member, alumni } = await getPeopleByGroup();
+---
+
+<Base title="People" description="Directors, researchers, and alumni of the Conversational AI Research Lab.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">People</p>
+      <h1>Who we are</h1>
+      <p class="lede">The lab brings together faculty and student researchers from computer science, psychology, and beyond.</p>
+    </header>
+
+    <section>
+      <div class="section-title"><h2>Directors</h2></div>
+      <ul class="directors">
+        {director.map((p) => <PersonCard person={p} size={180} profile />)}
+      </ul>
+    </section>
+
+    <section>
+      <div class="section-title"><h2>Current members</h2>{member.length > 0 && <span class="count">{member.length}</span>}</div>
+      {member.length > 0 ? (
+        <ul class="people">{member.map((p) => <PersonCard person={p} />)}</ul>
+      ) : (
+        <p class="empty">Our student researchers will be listed here soon. Interested in joining? <a href={url('contact')}>Get in touch</a>.</p>
+      )}
+    </section>
+
+    {alumni.length > 0 && (
+      <section>
+        <div class="section-title"><h2>Alumni</h2><span class="count">{alumni.length}</span></div>
+        <p class="thanks">Thank you to everyone who has been part of the lab.</p>
+        <ul class="people">{alumni.map((p) => <PersonCard person={p} size={112} />)}</ul>
+      </section>
+    )}
+  </div>
+</Base>
+
+<style>
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.75rem 1.5rem; }
+  .directors { grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+  .people { grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); }
+  .empty, .thanks { color: var(--ink-soft); }
+  .thanks { margin-top: -0.75rem; margin-bottom: 2rem; }
+</style>

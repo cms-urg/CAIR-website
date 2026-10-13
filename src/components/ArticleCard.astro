@@ -1,0 +1,39 @@
+---
+import { getEntries } from 'astro:content';
+import type { Article } from '../lib/content';
+import { url, formatDate } from '../lib/url';
+
+interface Props { article: Article }
+const { article } = Astro.props;
+const authors = await getEntries(article.data.authors);
+---
+
+<article class="card">
+  <p class="meta">
+    <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
+    {article.data.draft && <span class="draft">Draft</span>}
+  </p>
+  <h3><a href={url(`articles/${article.id}`)}>{article.data.title}</a></h3>
+  <p class="summary">{article.data.summary}</p>
+  <p class="by">{authors.map((a) => a.data.name).join(', ')}</p>
+</article>
+
+<style>
+  .card {
+    display: flex; flex-direction: column; gap: 0.5rem; height: 100%;
+    padding: 1.5rem; border-radius: var(--radius);
+    background: var(--bg-raised); border: 1px solid var(--rule);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card:has(a:focus-visible) { outline: 2px solid var(--accent); }
+  p { margin: 0; }
+  .meta { font-size: 0.82rem; color: var(--ink-faint); display: flex; gap: 0.6rem; }
+  .draft { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  h3 { margin: 0; font-size: 1.3rem; }
+  h3 a { color: var(--ink); text-decoration: none; }
+  h3 a::after { content: ''; position: absolute; inset: 0; }
+  .card { position: relative; }
+  .summary { color: var(--ink-soft); flex: 1; }
+  .by { font-size: 0.9rem; font-weight: 500; color: var(--accent); }
+</style>

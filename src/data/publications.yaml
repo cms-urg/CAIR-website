@@ -1,0 +1,82 @@
+# Lab publications. Each top-level key is a unique id (any slug works).
+#
+#   tier:  core    -> produced by the lab / directly on conversational AI
+#          related -> members' adjacent work (GenAI in education, ethics, assessment)
+#   theme: guardrails | cognition | applications   (optional; links the paper to a research area)
+#   type:  conference | journal | chapter | preprint | other
+#
+# Add `url:` (DOI or landing page) and/or `pdf:` when available. Author lists ending
+# in "et al." were truncated in the source; expand them when you have the full list.
+
+harrington-joordens-2026-scaling-oral:
+  title: "Scaling Authentic Assessment: Interaction Design and Student Sentiment in AI-Facilitated Oral Examinations"
+  authors: "Brian Harrington, Steve Joordens"
+  venue: "Proceedings of the 8th Annual Symposium on HCI Education"
+  year: 2026
+  tier: core
+  type: conference
+  theme: applications
+
+joordens-harrington-2026-ai-oral:
+  title: "AI-Based Oral Assessments: Getting Assessment Right, and Driving Learning in the Process"
+  authors: "Steve Joordens, Brian Harrington"
+  # Book title was truncated in Google Scholar — confirm the full title / publisher
+  venue: "Integrating AI in Education: Transforming Learning"
+  year: 2026
+  tier: core
+  type: chapter
+  theme: applications
+
+prompiengchai-2025-formative-genai:
+  title: "A Practical Guide for Supporting Formative Assessment and Feedback Using Generative AI"
+  authors: "Sapolnach Prompiengchai, Charith Narreddy, Steve Joordens"
+  venue: "arXiv preprint arXiv:2505.23405"
+  year: 2025
+  tier: core
+  type: preprint
+  theme: applications
+  url: "https://arxiv.org/abs/2505.23405"
+
+motallebi-2026-oral-exams-map:
+  title: "Oral Examinations in CS — A Systematic Literature Map"
+  authors: "M. Motallebi, I. Abramov, A. Z. Alnoor, A. Aziz, Y. Chen, T. Kao, Z. Olomi, et al."
+  venue: "Proceedings of the 31st ACM Conference on Innovation and Technology in Computer Science Education (ITiCSE)"
+  year: 2026
+  tier: related
+  type: conference
+  theme: applications
+
+harrington-2026-did-alice-do-wrong:
+  title: "Did Alice Do Wrong? Cross-Cultural Differences in Student Perceptions of Generative AI Use in University Computing Education"
+  authors: "Brian Harrington, I. Zlotnikova, G. Nadarajan, S. Ekundayo"
+  venue: "ACM Transactions on Computing Education 26(1)"
+  year: 2026
+  tier: related
+  type: journal
+  theme: guardrails
+
+zlotnikova-2026-genai-scenarios:
+  title: "Using GenAI Scenarios to Talk about Academic Integrity across Cultures"
+  authors: "I. Zlotnikova, Brian Harrington, G. Nadarajan, S. Ekundayo"
+  venue: "ACM Inroads 17(2), 42–47"
+  year: 2026
+  tier: related
+  type: journal
+  theme: guardrails
+
+harrington-2025-genai-ethics-international:
+  title: "An International Examination of Student Perceptions of the Ethics of Using Generative AI in CS Education"
+  authors: "Brian Harrington, I. Zlotnikova, G. Nadarajan, S. Ekundayo"
+  venue: "Proceedings of the ACM Global Computing Education Conference (CompEd), Vol. 2"
+  year: 2025
+  tier: related
+  type: conference
+  theme: guardrails
+
+harrington-2025-genai-litmap:
+  title: "A Systematic Literature Mapping of Early Generative AI Research in CS Education"
+  authors: "Brian Harrington, A. Z. Alnoor, P. Haqiqi, Z. Hoseininia, K. Lin, M. Lodi, A. Mirza, et al."
+  venue: "Proceedings of the 56th ACM Technical Symposium on Computer Science Education (SIGCSE TS)"
+  year: 2025
+  tier: related
+  type: conference

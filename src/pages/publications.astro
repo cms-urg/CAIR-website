@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PubList from '../components/PubList.astro';
+
+const all = (await getCollection('publications')).sort(
+  (a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title),
+);
+const core = all.filter((p) => p.data.tier === 'core');
+const related = all.filter((p) => p.data.tier === 'related');
+---
+
+<Base title="Publications" description="Publications from the Conversational AI Research Lab.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Publications</p>
+      <h1>Papers &amp; outputs</h1>
+      <p class="lede">Peer-reviewed papers, chapters, and preprints from the lab, followed by related work by lab members on generative AI in education.</p>
+    </header>
+
+    <section>
+      <div class="section-title"><h2>Lab publications</h2><span class="count">{core.length}</span></div>
+      <PubList pubs={core} />
+    </section>
+
+    {related.length > 0 && (
+      <section>
+        <div class="section-title"><h2>Related work by members</h2><span class="count">{related.length}</span></div>
+        <PubList pubs={related} />
+      </section>
+    )}
+
+    <p class="note">
+      For full publication records, see
+      <a href="https://scholar.google.com/citations?user=uYCeHkcAAAAJ&hl=en" rel="noopener">Brian Harrington on Google Scholar</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .note { margin-top: 3rem; color: var(--ink-faint); font-size: 0.95rem; }
+</style>

@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getArticles } from '../../lib/content';
+
+const articles = await getArticles();
+---
+
+<Base title="Articles" description="Essays and research updates from members of the Conversational AI Research Lab.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Articles</p>
+      <h1>Writing from the lab</h1>
+      <p class="lede">Essays, research notes, and commentary on conversational AI from lab members.</p>
+    </header>
+
+    {articles.length > 0 ? (
+      <div class="grid">{articles.map((a) => <ArticleCard article={a} />)}</div>
+    ) : (
+      <p class="empty">No articles yet. Check back soon.</p>
+    )}
+  </div>
+</Base>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 1.25rem; }
+  .empty { color: var(--ink-soft); }
+</style>

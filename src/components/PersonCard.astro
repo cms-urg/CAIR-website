@@ -1,0 +1,29 @@
+---
+import type { Person } from '../lib/content';
+import { url } from '../lib/url';
+import Avatar from './Avatar.astro';
+
+interface Props { person: Person; size?: number; profile?: boolean }
+const { person, size = 132, profile = false } = Astro.props;
+const { name, status, photo, link } = person.data;
+// Members link out (LinkedIn / personal site) like the students page; directors
+// (profile=true) and anyone without a link go to their on-site profile page.
+const external = !profile && Boolean(link);
+const href = external ? link : url(`people/${person.id}`);
+---
+
+<li class="card">
+  <a href={href} rel={external ? 'noopener' : undefined} class="photo"><Avatar name={name} photo={photo} size={size} /></a>
+  <h3><a href={href} rel={external ? 'noopener' : undefined}>{name}</a></h3>
+  <p>{status}</p>
+</li>
+
+<style>
+  .card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .photo { border-radius: 50%; transition: transform 0.2s ease; }
+  .photo:hover { transform: translateY(-3px); }
+  h3 { font-size: 1.1rem; margin: 0.9rem 0 0.2rem; }
+  h3 a { color: var(--ink); text-decoration: underline dashed var(--rule); text-underline-offset: 0.3em; }
+  h3 a:hover { text-decoration-color: var(--accent); }
+  p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.4; max-width: 15rem; }
+</style>

@@ -1,0 +1,26 @@
+---
+// CAIR brand mark, redrawn as SVG from the official logo files so it stays crisp
+// and can recolour per theme. "mark" = the bubble-C icon; "wordmark" = C + ΛIR.
+// Strokes use currentColor; the dot is always brand teal.
+interface Props { variant?: 'mark' | 'wordmark'; height?: number; class?: string }
+const { variant = 'mark', height = 32, class: cls } = Astro.props;
+---
+
+{variant === 'mark' ? (
+  <svg class:list={['logo', cls]} height={height} width={height} viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M22.42 10.62A8.375 8.375 0 1 0 22.42 21.38" fill="none" stroke="currentColor" stroke-width="3.75" stroke-linecap="round" />
+    <circle cx="16" cy="16" r="2.1" fill="var(--teal)" />
+  </svg>
+) : (
+  <svg class:list={['logo', cls]} height={height} width={(height * 395) / 142} viewBox="0 0 395 142" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M115.4 33.7A58 58 0 1 0 115.4 108.3" stroke-width="26" />
+      <path d="M163 115L199 49L235 115M281 49V115M325 115V49H349A22 22 0 0 1 349 93H325M347 93L369 115" stroke-width="22" />
+    </g>
+    <circle cx="71" cy="71" r="15" fill="var(--teal)" />
+  </svg>
+)}
+
+<style>
+  .logo { flex: none; display: block; }
+</style>
