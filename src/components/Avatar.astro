@@ -1,25 +1,27 @@
 ---
 import { url } from '../lib/url';
 
-interface Props { name: string; photo?: string; size?: number }
-const { name, photo, size = 160 } = Astro.props;
+interface Props { name: string; photo?: string; size?: number; shape?: 'circle' | 'square' }
+const { name, photo, size = 160, shape = 'circle' } = Astro.props;
 const initials = name.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 ---
 
 {photo ? (
-  <img class="avatar" src={url(photo)} alt={name} width={size} height={size} loading="lazy" style={`--s:${size}px`} />
+  <img class:list={['avatar', shape]} src={url(photo)} alt={name} width={size} height={size} loading="lazy" style={`--s:${size}px`} />
 ) : (
-  <span class="avatar initials" role="img" aria-label={name} style={`--s:${size}px`}>{initials}</span>
+  <span class:list={['avatar', 'initials', shape]} role="img" aria-label={name} style={`--s:${size}px`}>{initials}</span>
 )}
 
 <style>
   .avatar {
-    width: var(--s); height: var(--s); border-radius: 50%; object-fit: cover; flex: none;
-    background: var(--accent-soft);
+    width: var(--s); height: var(--s); object-fit: cover; flex: none;
+    background: var(--chip);
   }
+  .circle { border-radius: 50%; }
+  .square { border-radius: 14px; }
   .initials {
     display: inline-grid; place-items: center;
-    font-family: var(--font-display); font-size: calc(var(--s) * 0.34); color: var(--accent);
-    background: linear-gradient(135deg, var(--chip), var(--accent-soft));
+    font-family: var(--font-display); font-weight: 500; font-size: calc(var(--s) * 0.3); color: #fff;
+    background: radial-gradient(120% 120% at 100% 0%, var(--navy-2), var(--navy));
   }
 </style>

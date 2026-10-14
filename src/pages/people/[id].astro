@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Avatar from '../../components/Avatar.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import Icon, { type IconName } from '../../components/Icon.astro';
 import { getArticles } from '../../lib/content';
 import { url } from '../../lib/url';
 
@@ -16,28 +17,47 @@ const { Content } = await render(person);
 const d = person.data;
 const articles = (await getArticles()).filter((a) => a.data.authors.some((r) => r.id === person.id));
 
-const LABELS = { website: 'Website', scholar: 'Google Scholar', orcid: 'ORCID', github: 'GitHub', linkedin: 'LinkedIn' } as const;
-const links = Object.entries(d.links ?? {}).filter(([, v]) => v) as [keyof typeof LABELS, string][];
+const LABELS: Record<IconName, string> = {
+  email: 'Email', website: 'Website', scholar: 'Google Scholar', orcid: 'ORCID',
+  github: 'GitHub', linkedin: 'LinkedIn', rss: 'RSS',
+};
+const links: [IconName, string][] = [
+  ...(d.email ? [['email', `mailto:${d.email}`] as [IconName, string]] : []),
+  ...(Object.entries(d.links ?? {}).filter(([, v]) => v) as [IconName, string][]),
+];
+// A member's `link` (e.g. LinkedIn) doubles as a profile link if not already listed
+if (d.link && !links.some(([, v]) => v === d.link)) {
+  links.push([d.link.includes('linkedin.com') ? 'linkedin' : 'website', d.link]);
+}
 ---
 
 <Base title={d.name} description={`${d.name} — ${d.status}`}>
   <div class="wrap">
     <a class="back" href={url('people')}>← All people</a>
     <header class="profile">
-      <Avatar name={d.name} photo={d.photo} size={200} />
-      <div>
-        <h1>{d.name}</h1>
-        <p class="status">{d.status}</p>
-        {d.affiliation && <p class="aff">{d.affiliation}</p>}
+      <Avatar name={d.name} photo={d.photo} size={184} />
+      <h1>{d.name}</h1>
+      <p class="status">{d.status}</p>
+      {d.affiliation && <p class="aff">{d.affiliation}</p>}
+      {links.length > 0 && (
         <ul class="links">
-          {d.email && <li><a href={`mailto:${d.email}`}>Email</a></li>}
-          {d.link && <li><a href={d.link} rel="noopener">Profile</a></li>}
-          {links.map(([k, v]) => <li><a href={v} rel="noopener">{LABELS[k]}</a></li>)}
+          {links.map(([k, v]) => (
+            <li>
+              <a href={v} rel={k === 'email' ? undefined : 'noopener'} aria-label={LABELS[k]} title={LABELS[k]}>
+                <Icon name={k} size={18} />
+              </a>
+            </li>
+          ))}
         </ul>
-      </div>
+      )}
     </header>
 
-    <div class="prose bio"><Content /></div>
+    {person.body?.trim() && (
+      <section class="bio">
+        <h2>Bio</h2>
+        <div class="prose"><Content /></div>
+      </section>
+    )}
 
     {articles.length > 0 && (
       <section>
@@ -49,14 +69,21 @@ const links = Object.entries(d.links ?? {}).filter(([, v]) => v) as [keyof typeo
 </Base>
 
 <style>
-  .back { display: inline-block; margin: 2rem 0 1.5rem; font-size: 0.92rem; text-decoration: none; }
-  .profile { display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; padding-bottom: 2.5rem; border-bottom: 1px solid var(--rule); margin-bottom: 2.5rem; }
-  h1 { margin-bottom: 0.25rem; }
-  .status { font-size: 1.15rem; color: var(--ink-soft); margin: 0; }
-  .aff { color: var(--ink-faint); margin: 0.25rem 0 0; }
-  .links { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .links a { display: block; padding: 0.3rem 0.85rem; border-radius: 999px; border: 1px solid var(--rule); font-size: 0.88rem; text-decoration: none; }
-  .links a:hover { border-color: var(--accent); }
-  .bio { margin-bottom: 4rem; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 1.25rem; }
+  .back { display: block; width: fit-content; margin: 2rem 0 0; font-size: 0.92rem; text-decoration: none; }
+  .profile { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1rem 0 3rem; }
+  h1 { margin: 1.5rem 0 0.4rem; }
+  .status { font-size: 1.15rem; color: var(--ink-soft); margin: 0; max-width: 40rem; text-wrap: balance; }
+  .aff { color: var(--ink-faint); margin: 0.3rem 0 0; }
+  .links { list-style: none; padding: 0; margin: 1.5rem 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+  .links a {
+    display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%;
+    color: var(--ink-soft); background: var(--chip);
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+  }
+  .links a:hover { color: var(--bg); background: var(--ink); transform: translateY(-2px); }
+  .bio { background: var(--bg-tint); border-radius: var(--radius); padding: 2.25rem 2.5rem 2.5rem; }
+  .bio h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+  .bio .prose { max-width: none; font-size: 1.05rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 1.5rem; }
+  @media (max-width: 640px) { .bio { padding: 1.5rem 1.25rem 1.75rem; } }
 </style>

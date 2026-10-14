@@ -1,0 +1,19 @@
+---
+// Branded stand-in for missing thumbnails: navy panel with the CAIR bubble-C.
+---
+
+<div class="ph" aria-hidden="true">
+  <svg viewBox="0 0 32 32">
+    <path d="M22.42 10.62A8.375 8.375 0 1 0 22.42 21.38" fill="none" stroke="currentColor" stroke-width="3.75" stroke-linecap="round" />
+    <circle cx="16" cy="16" r="2.1" />
+  </svg>
+</div>
+
+<style>
+  .ph {
+    width: 100%; height: 100%; display: grid; place-items: center;
+    background: radial-gradient(120% 120% at 100% 0%, var(--navy-2), var(--navy));
+  }
+  svg { width: 34%; max-width: 7rem; height: auto; color: #ffffff22; }
+  circle { fill: var(--teal); opacity: 0.55; }
+</style>

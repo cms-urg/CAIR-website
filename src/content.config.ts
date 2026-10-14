@@ -36,13 +36,16 @@ const people = defineCollection({
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/articles' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     date: z.coerce.date(),
     updated: z.coerce.date().optional(),
     // One or more people ids (the filename without .md in src/content/people)
     authors: z.array(reference('people')).min(1),
     summary: z.string(),
+    // Optional cover image, relative to the article file (e.g. ./images/cover.jpg)
+    cover: image().optional(),
+    coverAlt: z.string().optional(),
     tags: z.array(z.string()).default([]),
     // Drafts render in `npm run dev` but are excluded from production builds
     draft: z.boolean().default(false),
@@ -60,7 +63,11 @@ const publications = defineCollection({
     tier: z.enum(['core', 'related']).default('core'),
     type: z.enum(['conference', 'journal', 'chapter', 'preprint', 'other']).default('conference'),
     url: z.url().optional(),
-    pdf: z.url().optional(),
+    // Full URL, or a path under /public (e.g. "papers/2026-oral-exams.pdf")
+    pdf: z.string().optional(),
+    poster: z.string().optional(),
+    // Thumbnail (a figure from the paper) under /public, e.g. "img/pubs/oral-exams.png"
+    image: z.string().optional(),
     theme: z.enum(['guardrails', 'cognition', 'applications']).optional(),
   }),
 });

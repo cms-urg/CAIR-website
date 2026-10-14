@@ -31,6 +31,12 @@ draft: false
 ---
 ```
 
+Optional: `cover: ./images/cover.jpg` (relative to the article) adds an image to the article card; `coverAlt` describes it.
+
+### Publication thumbnails & files
+
+Each publication card shows a thumbnail, like a figure from the paper. Add `image: img/pubs/<name>.png` (file in `public/img/pubs/`); without one, a branded placeholder is shown. `pdf:` and `poster:` accept a full URL or a path under `public/` (e.g. `papers/2026-oral-exams.pdf`) and appear as icon links on the card.
+
 Frontmatter is validated at build time (`src/content.config.ts`): a typo in an author id or a missing `summary` fails the build with a clear message instead of publishing a broken page.
 
 ### People groups
