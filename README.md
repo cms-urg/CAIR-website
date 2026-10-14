@@ -41,7 +41,7 @@ Frontmatter is validated at build time (`src/content.config.ts`): a typo in an a
 
 ### People groups
 
-- `director` — faculty leads; shown large, linking to their on-site profile
+- `director` — faculty leads; shown first, linking to their on-site profile
 - `member` — current researchers; photo + name + one-line status, linking to `link` (LinkedIn/personal site) if set
 - `alumni` — same card, shown under "Alumni" (status line like "Software Engineer at Google" or "Class of '25")
 
